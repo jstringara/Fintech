@@ -1,0 +1,5 @@
+reti neurali
+come cambiare parametri random forest fitcensamble se cambi un parametro quanto cambia il risultato
+kfold da modificare più o meno di 5
+
+Income/Age si dovrebbe comportare un po' come Income/Wealth

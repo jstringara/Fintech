@@ -1,0 +1,63 @@
+1o gruppo:
+Stationarity anlysis:
+- With Dickey-FUller test almost all variables are non-stationary (curious VIX stationary)
+
+Autoencoder
+
+2o o 3o gruppo:
+KNN
+
+
+4o gruppo:
+- reshuffle data to break down auto correlation (non ha senso)
+- create training validation and test set
+-train model
+-tune hyperp and thresh
+-test model
+
+Gaussian copula
+
+Isolation forests
+
+Nostro gruppo:
+strano che abbiamo una bassa accuracy
+
+6o gruppo:
+KDE
+MCMC
+Gaussian mixture models
+kernel density estimation
+SVM esce bene
+
+
+COPOD
+
+
+
+Potremmo aggiornare i dati fino al 2022 e vedere 
+se effettivamente identifica l'anomalia da marzo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
