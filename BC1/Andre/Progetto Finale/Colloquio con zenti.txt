@@ -1,0 +1,28 @@
+I mercati non hanno dei pattern che si ripetono
+L'approccio è corretto, è il tipo di problema a cui non si applica bene
+Forse si può usare una soluzione più semplice
+Spesso i sintomi non si trovano nel passato ma sono più "cross sectional"
+Di solito le anomalie si trovano in alcuni focolai e negli altri non succede nulla
+
+Si può provare ad usare qualcosa di più semplice:
+- quando le correlazioni tra gli asset tra -/obbligazione è quasi = a 0 e forse cresce
+- un'altra cosa con le reti si calcolano tutte le statiche della serie storica a 3m/6m, 
+momenti di diverso genere e si sbattono dentro in ML
+
+Sbilanciamento del dataset e quale metrica utilizzare?
+Dobbiamo prendere una posizione di buisiness, se fossimo il risk manager di una società 
+cosa faremmo? Se c'è una crisi la voglio beccare, preferisco dare un falso allarme anche 
+quando non c'è
+Con F1 quasi mai si sbaglia
+Concentriamoci ad evitare i falsi negativi
+Ci concentriamo su una ma le altri dovrebbero essere comunque decenti (abbiamo dei vincoli)
+
+Feature selection al posto di PCA?
+Carina l'idea della distribuzione di probabilità
+PCA sconsigliata perchè si basa sulla varianza
+Ha senso guardare tra le features correlate tra loro
+
+L'oro? Non è un bene rifugio, come un "mito"
+
+
+
