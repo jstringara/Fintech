@@ -1,0 +1,9 @@
+Per le variabili gaussiane ma non troppo facciamo boxcox
+per le altre facciamo trasformazioni logaritmiche
+visualizzazione facciamo correlation plot e istogrammi
+scaling zscore o rescaling uguale, proviamoli entrambi
+bisogna ragionare sul rescaling e/o numericizzazione delle categoriche
+invece che fare grouping basato sui need potremmo provare a fare grouping sulla propensione al rischio
+divisioni dei dati da decidere al momento in base a cosa viene meglio, possibilmente facendo la crossvalidation suggerita da Zenti
+usare cvpartition per avere partizioni random
+
