@@ -3,7 +3,8 @@ clear
 close all
 
 % Load data 
-load('C:\Users\giuli\OneDrive\Desktop\Fintech\Fintech\BC3\Zenti\EWS.mat')
+%load('C:\Users\giuli\OneDrive\Desktop\Fintech\Fintech\BC3\Zenti\EWS.mat')
+load("EWS.mat")
 %% 
 
 % Always positive variables   => log-differences (log-returns)
