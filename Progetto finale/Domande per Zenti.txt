@@ -1,1 +1,7 @@
 Cosa si aspettano?
+- Jacopo:
+-- Quali metodi consiglia per risolvere lo sbilanciamento dei dati? Come e dove applicarli (es. prima del testing o durante?)?
+-- Quanto insight finanziario vogliono? I dataset che abbiamo scelto si adattano al mondo fintech? Se sì, cosa ci consiglia?
+-- Quale parte deve essere il fulcro del progetto? Il modello o la parte "business"?
+-- Se non riusciamo a trovare risultati soddisfacenti, cosa è bene fare? Cambiare direttamente dataset o mostrare perchè il/i modello/i non funzionano?
+
