@@ -2,3 +2,4 @@
 /venv
 BC1/Nostro/UMAP
 /teo
+*/__pycache__
