@@ -151,11 +151,119 @@ class RNN_model:
         # fake input
 
         # define the model
-        model = Model(inputs=self.input1, 
-            outputs=self.output)
+        model = Model(inputs=self.input1, outputs=self.output)
         
         # save the model
         self.testing_model = model
 
+    # testing functions
+
+    def testLoss(self):
+        """
+        This function tests the custom loss function defined above and
+        compares it to a hard-coded version.
+        """
+        # define the parameters for the test
+        batch_size, timesteps, features, tolerance= 32, 3, 3, 1e-5
+        # create a test tensor of size (batch_size, timesteps, features)
+        test_tensor = np.random.rand(batch_size, timesteps, features)
+        # create a test output of size (batch_size, features)
+        test_output = np.random.rand(batch_size, features)
+        # create a test target of size (batch_size, 1)
+        test_target = np.random.rand(batch_size, 1)
+
+        # extract the last row of the tensor and reshape it to be 2D
+        test_prices = K.reshape(test_tensor[:, -1, :],
+            (-1, test_tensor.shape[2]))
+        # calculate the portfolio values as the dot product of the prices and
+        # the weights
+        test_estim = K.batch_dot(test_output, test_prices)
+
+        # check that the rows of the test_estim are the same as sum of the rows
+        # element-wise multiplication of the test_output and test_prices
+        for i in range(batch_size):
+            sum = 0
+            for j in range(features):
+                sum += test_output[i, j] * test_prices[i, j]
+            if sum - test_estim[i] > tolerance:
+                raise ValueError("The portfolio values are not the same")
+
+        # check that the mse is the same as the mean of the square of test_estim
+        test_mse = K.mean(K.square(test_target - test_estim))
+        hard_mse = 0
+        for i in range(batch_size):
+            hard_mse += (test_target[i] - test_estim[i])**2
+        hard_mse /= batch_size
+        if test_mse - hard_mse > tolerance:
+            raise ValueError("The mse is not the same")
+
+        print("The test was passed \u2713")
+
+    def testModelPermanence(self):
+        """
+        This functions creates a training and testing model and trains the
+        training model on some dummy data.
+        Then it check if the weights of the training and testing models are the
+        same.
+        """
+        # set the test parameters
+        batch_size, epochs = 32, 100
+        pct_split = 0.8
+        self.lookback = 3
+        self.num_features = 3
+
+        # create the dummy data
+        x = DataFrame(np.random.rand(100, 3), columns=['a', 'b', 'c'])
+        y = DataFrame(np.random.rand(100, 1), columns=['d'])
+
+        # preprocess the data
+        x_train, y_train, _, _ = self.Preprocess(x, y, pct_split)
+
+        # train the model
+        self.createTrainModel()
+        self.training_model.fit([x_train, y_train], epochs=epochs,
+            batch_size=batch_size, verbose=0)
+
+        # create the testing model
+        self.createTestModel()
+
+        # check that the weights of the training and testing models are the same
+        # we only need to check the weights of the RNN layer and the Dense layer
+        # since the input layer is different
+        self.training_model.summary()
+        self.testing_model.summary()
+
+        # get the weights of the RNN layer and the Dense layer of the training
+        # model
+        rnn_weights_train = self.training_model.layers[1].get_weights()
+        dense_weights_train = self.training_model.layers[3].get_weights()
+
+        # get the weights of the RNN layer and the Dense layer of the testing
+        # model
+        rnn_weights_test = self.testing_model.layers[1].get_weights()
+        dense_weights_test = self.testing_model.layers[2].get_weights()
+
+        # check that the weights of the RNN layer are the same
+        for i in range(len(rnn_weights_train)):
+            if not np.array_equal(rnn_weights_train[i], rnn_weights_test[i]):
+                raise ValueError("The weights of the RNN layer are not the same")
+            
+        # check that the weights of the Dense layer are the same
+        for i in range(len(dense_weights_train)):
+            if not np.array_equal(dense_weights_train[i], dense_weights_test[i]):
+                raise ValueError("The weights of the Dense layer are not the same")
+            
+        print("The permanence test was passed \u2713")
+
+
 if __name__ == "__main__":
-    pass
+
+    # create a dummy model
+    model = RNN_model(lookback=3, num_features=3)
+
+    # test the loss function
+    model.testLoss()
+
+    # test the model permanence
+    model.testModelPermanence()
+
