@@ -41,7 +41,7 @@ for t = 1:length(y_meas)
     x_corr = x_pred + (y_meas(t) - H(t,:)*x_pred')'*K'; % Correct the state estimate based on the current measurement
    % Prediction step
     x_pred = x_corr*F;
-    P_pred = F*P_corr*F' + V1;
+    P_pred = F*P*F' + V1;
 end
 
 replRetOLS = X*x_pred(1,:)'; % compute portfolio returns using regression coefficients as weights
