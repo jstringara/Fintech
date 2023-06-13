@@ -1,4 +1,6 @@
 /fintech
-/venv
+venv/
+.vscode/
 BC1/Nostro/UMAP
 /teo
+*/__pycache__
