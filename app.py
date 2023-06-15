@@ -29,7 +29,7 @@ your portfolio. \n"""
 )
 
 # load the data
-data = pd.read_csv("FinalProject/InvestmentReplica.csv")
+data = pd.read_csv("FinalProject/InvestmentReplica.CSV")
 
 # construct the list of futures and indexes
 indexes_list = ['MXWO','MXWD','LEGATRUU','HFRXGL']
