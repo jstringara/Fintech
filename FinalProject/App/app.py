@@ -117,7 +117,7 @@ volatility. It is a high-risk, high-reward portfolio. Use at your own risk."""
 )
 
 # load the data
-data = pd.read_csv("FinalProject/InvestmentReplica.CSV")
+data = pd.read_csv("FinalProject/App/InvestmentReplica.CSV")
 
 # construct the list of futures and indexes
 indexes_list = ['MXWO','MXWD','LEGATRUU','HFRXGL']
