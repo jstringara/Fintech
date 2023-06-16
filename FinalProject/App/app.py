@@ -236,3 +236,59 @@ else:
     plt.ylabel("Price")
     plt.xticks(dates[::30], rotation=45)
     pred_plot.pyplot(fig)
+
+#> Portfolio evaluation <#
+st.write("---")
+st.write("## Portfolio evaluation")
+st.write("""Here are some key metrics to evaluate the performance of your
+selected portfolio.
+- **MSE**: Mean Squared Error. This is the average of the squared differences
+between the predicted and the actual values. The lower the better.
+- **TEV**: Tracking Error Volatility. This is the standard deviation of the
+differences between the predicted and the actual values. The lower the better.
+- **IR**: Information Ratio. This is the ratio of the mean of the differences
+between the predicted and the actual values and the standard deviation of the
+differences. The higher the better.
+- **MAT**: Mean Annual Turnover. This is the average of the annual turnover
+of the portfolio. It is a measure of how much the portfolio changes over time.
+- **MATC**: Mean Annual Trading Costs. This is the average of the annual trading
+costs of the portfolio. It is a measure of how much it costs to trade the
+portfolio over time."""
+)
+
+table_metrics = st.empty()
+
+if approach == "Base":
+    table_metrics.markdown("""
+    | Metric | Value |
+    | --- | --- |
+    | MSE | 0.000177529 |
+    | Tracking Error Volatility | 0.0893928 |
+    | Information Ratio | -0.0546371 |
+    | Mean Annual Turnover | 0.239801 |
+    | Mean Annual Trading Costs | 9.59203e-05 |
+    """)
+
+elif approach == "Sure-Fire":
+    table_metrics.markdown("""
+    | Metric | Value |
+    | --- | --- |
+    | MSE | 0.0002383323353445438 |
+    | Tracking Error Volatility | 0.10840432663308824 |
+    | Information Ratio | -0.032407531636239786 |
+    | Mean Annual Turnover | 0.23454698549080988 |
+    | Mean Annual Trading Costs | 9.381879419632396e-05 |
+    """)
+
+else:
+    # table with the metrics
+    
+    table_metrics.markdown("""
+    | Metric | Value |
+    | --- | --- |
+    | MSE | 0.00023566504919694437 |
+    | Tracking Error Volatility | 0.10264704190340922 |
+    | Information Ratio | -0.05599956074047027 |
+    | Mean Annual Turnover | 0.3123969643683995 |
+    | Mean Annual Trading Costs | 0.0001249587857473598 |
+    """)
