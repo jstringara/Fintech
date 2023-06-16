@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
 import numpy as np
 import pickle
 
@@ -13,7 +15,7 @@ st.set_page_config(
 BASEDIR = 'FinalProject/App/'
 
 #> Header <#
-st.title("PortFolio replication")
+st.title(" :chart_with_upwards_trend: PortFolio replication")
 st.write(
 """This is a tool to explore your portfolio replication options using
 Futures available on the market. \n
@@ -23,7 +25,7 @@ https://github.com/jstringara/Fintech) page."""
 
 #> Futures Presentation <#
 st.write("---")
-st.write("## Futures")
+st.write("## :chart: Futures")
 st.write(
 """Here is a rundown of the futures that we used in our study:
 - **RX1**: Fixed-income security issued by the Federal Republic of Germany.
@@ -87,22 +89,22 @@ index's performance."""
 
 #> Futures Selection <#
 st.write("---")
-st.write("## Futures Selection")
+st.write("## :mag_right: Futures Selections")
 st.write(
 """For your convenience, we have pre-selected three groups of futures for you to
 tinker with.
-- **Base Futures**: This group contains all the futures that we used in our
+- **Base Futures**:classical_building:: This group contains all the futures that we used in our
 study and it will give you the most diversified portfolio. Furthermore, this
 comprehensive approach will enable you to capitalize on opportunities in
 different sector and geographic regions. You certainly can't go wrong with this.
-- **Sure-Fire Futures**: This group contains the futures that we found to have
+- **Sure-Fire Futures**:moneybag:: This group contains the futures that we found to have
 the lowest volatility. It is comprized of RX1, DU1, GC1, TU2, VG1 and ES1. This
 selection of government bonds, gold and equities from different regions provides
 a strong foundation for risk management and potential returns. Moreover, the
 portfolio benefits from the lilquidity of the selected futures, allowing for
 efficient rebalancing. We recommend this portfolio if you are looking for a
 stable, low-risk portfolio.
-- **Dark Horse Futures**: This group contains the futures that we found to have
+- **Dark Horse Futures**:boom:: This group contains the futures that we found to have
 the highest volatility. It is comprized of ES1, NQ1, TP1, GC1, CO1, VG1, TY1 and
 RX1. This selection of equities from Japan, the US and the EU and Gold with just
 a touch of short-term bonds provides exposure to major American, Asian and EU
@@ -132,53 +134,89 @@ daring_futures = [ "ES1", "NQ1", "TP1", "GC1", "DU1", "VG1", "TY1", "RX1"]
 daring_futures = futures_norm[daring_futures]
 
 # select the approach
-approach = st.radio(
-    "Select the approach you want to use to replicate your portfolio",
-    ("Base", "Sure-Fire", "Dark Horse")
-)
+with st.sidebar:
+    approach = st.radio(
+        "Select the approach you want to use to replicate your portfolio",
+        ("Base", "Sure-Fire", "Dark Horse")
+    )
 
 # show the graph based on the approach
-plot_futures = st.empty()
+with st.spinner("Loading the graph..."):
+    plot_futures = st.empty()
 
 # create the fig based on the selection
 if approach == "Base":
-    # plot all the futures
-    fig = plt.figure(figsize=(10, 5))
-    futures_norm.plot(ax=plt.gca())
-    plt.legend(loc='best')
-    plt.title("Base Futures")
-    plt.xlabel("Date")
-    plt.ylabel("Normalized Price")
-    plt.xticks(rotation=45)
-    plot_futures.pyplot(fig)
+    # plot each future as its own line, on the x axis the dates, display only 
+    # one out of every 30, inclined by 45 degrees
+    fig = go.Figure(
+        data=[
+            go.Scatter(
+                x=futures_norm.index,
+                y=futures_norm[future],
+                name=future
+            ) for future in futures_norm.columns
+        ]
+    )
+    fig.update_layout(
+        title="Base Futures",
+        xaxis_title="Date",
+        yaxis_title="Normalized Price",
+        xaxis_tickangle=-45,
+        xaxis_dtick=30,
+        legend_title="Futures"
+    )
+    plot_futures.plotly_chart(fig)
 
 elif approach == "Sure-Fire":
-    fig = plt.figure(figsize=(10, 5))
-    surefire_futures.plot(ax=plt.gca())
-    plt.legend(loc='best')
-    plt.title("Sure-Fire Futures")
-    plt.xlabel("Date")
-    plt.ylabel("Normalized Price")
-    plt.xticks(rotation=45)
-    plot_futures.pyplot(fig)
+
+    fig = go.Figure(
+        data=[
+            go.Scatter(
+                x=surefire_futures.index,
+                y=surefire_futures[future],
+                name=future
+            ) for future in surefire_futures.columns
+        ]
+    )
+    fig.update_layout(
+        title="Sure-Fire Futures",
+        xaxis_title="Date",
+        yaxis_title="Normalized Price",
+        xaxis_tickangle=-45,
+        xaxis_dtick=30,
+        legend_title="Futures"
+    )
+    plot_futures.plotly_chart(fig)
 
 else:
-    fig = plt.figure(figsize=(10, 5))
-    daring_futures.plot(ax=plt.gca())
-    plt.legend(loc='best')
-    plt.title("Dark Horse Futures")
-    plt.xlabel("Date")
-    plt.ylabel("Normalized Price")
-    plt.xticks(rotation=45)
-    plot_futures.pyplot(fig)
+
+    fig = go.Figure(
+        data=[
+            go.Scatter(
+                x=daring_futures.index,
+                y=daring_futures[future],
+                name=future
+            ) for future in daring_futures.columns
+        ]
+    )
+    fig.update_layout(
+        title="Dark Horse Futures",
+        xaxis_title="Date",
+        yaxis_title="Normalized Price",
+        xaxis_tickangle=-45,
+        xaxis_dtick=30,
+        legend_title="Futures"
+    )
+    plot_futures.plotly_chart(fig)
 
 #> Portfolio replication <#
 
 st.write("---")
-st.write("## Portfolio replication")
+st.write("## :rocket: Portfolio replication")
 
 # leave empty space for the graph
-pred_plot = st.empty()
+with st.spinner("Loading the graph..."):
+    pred_plot = st.empty()
 
 # load all the models and cache them
 @st.cache_data
@@ -203,43 +241,90 @@ dates = futures_norm.index[len(futures_norm)-len(y_pred_Enet):]
 
 if approach == "Base":
     # show the prediction against the target
-    fig = plt.figure(figsize=(10, 5))
-    plt.plot(dates, y_pred_Enet, label='Prediction')
-    plt.plot(dates, y, label='Target')
-    plt.legend()
-    plt.title("Prediction vs Target")
-    plt.xlabel("Date")
-    plt.ylabel("Price")
-    plt.xticks(dates[::30], rotation=45)
-    pred_plot.pyplot(fig)
+    fig = go.Figure(
+        data=[
+            go.Scatter(
+                x=dates,
+                y=y_pred_Enet.flatten(),
+                name="Prediction",
+                line={"color": "red"}
+            ),
+            go.Scatter(
+                x=dates,
+                y=y.values.flatten(),
+                name="Target",
+                line={"color": "blue"}
+            )
+        ]
+    )
+    fig.update_layout(
+        title="Prediction vs Target (Base)",
+        xaxis_title="Date",
+        yaxis_title="Normalized Price",
+        xaxis_tickangle=-45,
+        xaxis_dtick=30,
+        legend_title="Futures"
+    )
+    pred_plot.plotly_chart(fig)
 
 elif approach == "Sure-Fire":
-    # show the prediction against the target
-    fig = plt.figure(figsize=(10, 5))
-    plt.plot(dates, y_pred_Enet_Surefire, label='Prediction')
-    plt.plot(dates, y, label='Target')
-    plt.legend()
-    plt.title("Prediction vs Target (Sure-Fire)")
-    plt.xlabel("Date")
-    plt.ylabel("Price")
-    plt.xticks(dates[::30], rotation=45)
-    pred_plot.pyplot(fig)
+    
+    fig = go.Figure(
+        data=[
+            go.Scatter(
+                x=dates,
+                y=y_pred_Enet_Surefire.flatten(),
+                name="Prediction",
+                line={"color": "red"}
+            ),
+            go.Scatter(
+                x=dates,
+                y=y.values.flatten(),
+                name="Target",
+                line={"color": "blue"}
+            )
+        ]
+    )
+    fig.update_layout(
+        title="Prediction vs Target (Sure-Fire)",
+        xaxis_title="Date",
+        yaxis_title="Normalized Price",
+        xaxis_tickangle=-45,
+        xaxis_dtick=30,
+        legend_title="Futures"
+    )
+    pred_plot.plotly_chart(fig)
 
 else:
-    # show the prediction against the target
-    fig = plt.figure(figsize=(10, 5))
-    plt.plot(dates, y_pred_Enet_daring, label='Prediction')
-    plt.plot(dates, y, label='Target')
-    plt.legend()
-    plt.title("Prediction vs Target (Dark Horse)")
-    plt.xlabel("Date")
-    plt.ylabel("Price")
-    plt.xticks(dates[::30], rotation=45)
-    pred_plot.pyplot(fig)
+    fig = go.Figure(
+        data=[
+            go.Scatter(
+                x=dates,
+                y=y_pred_Enet_daring.flatten(),
+                name="Prediction",
+                line={"color": "red"}
+            ),
+            go.Scatter(
+                x=dates,
+                y=y.values.flatten(),
+                name="Target",
+                line={"color": "blue"}
+            )
+        ]
+    )
+    fig.update_layout(
+        title="Prediction vs Target (Dark Horse)",
+        xaxis_title="Date",
+        yaxis_title="Normalized Price",
+        xaxis_tickangle=-45,
+        xaxis_dtick=30,
+        legend_title="Futures"
+    )
+    pred_plot.plotly_chart(fig)
 
 #> Portfolio evaluation <#
 st.write("---")
-st.write("## Portfolio evaluation")
+st.write("## :bookmark_tabs: Portfolio evaluation")
 st.write("""Here are some key metrics to evaluate the performance of your
 selected portfolio.
 - **MSE**: Mean Squared Error. This is the average of the squared differences
@@ -256,14 +341,15 @@ costs of the portfolio. It is a measure of how much it costs to trade the
 portfolio over time."""
 )
 
-table_metrics = st.empty()
+with st.spinner("Loading the metrics..."):
+    table_metrics = st.empty()
 
 if approach == "Base":
     table_metrics.markdown("""
     | Metric | Value |
     | --- | --- |
     | MSE | 0.000177529 |
-    | Tracking Error Volatility | 0.0893928 |
+    | Tracking Error Volatility | 0.0894928 |
     | Information Ratio | -0.0546371 |
     | Mean Annual Turnover | 0.239801 |
     | Mean Annual Trading Costs | 9.59203e-05 |
