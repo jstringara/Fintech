@@ -355,20 +355,63 @@ else:
 st.write("---")
 st.write("## :bookmark_tabs: Portfolio evaluation")
 st.write("""Here are some key metrics to evaluate the performance of your
-selected portfolio.
-- **MSE**: Mean Squared Error. This is the average of the squared differences
-between the predicted and the actual values. The lower the better.
-- **TEV**: Tracking Error Volatility. This is the standard deviation of the
-differences between the predicted and the actual values. The lower the better.
-- **IR**: Information Ratio. This is the ratio of the mean of the differences
-between the predicted and the actual values and the standard deviation of the
-differences. The higher the better.
-- **MAT**: Mean Annual Turnover. This is the average of the annual turnover
-of the portfolio. It is a measure of how much the portfolio changes over time.
-- **MATC**: Mean Annual Trading Costs. This is the average of the annual trading
-costs of the portfolio. It is a measure of how much it costs to trade the
-portfolio over time."""
-)
+selected portfolio.""")
+# MSE
+# make an short text that can be expanded
+st.write("""- **MSE**: Mean Squared Error. This is the average of the squared
+differences between the predicted and the actual values.""")
+with st.expander("More info on the MSE", expanded=False):
+    st.write("""The MSE provides an evaluation of the
+accuracy of the model. Here it represents of closely we are able to replicate
+our target. The lower the better.""")
+
+# TEV
+st.write("""- **TEV**: Tracking Error Volatility. This is the standard deviation
+of the differences between the predicted and the actual values.""")
+with st.expander("More info on the TEV", expanded=False):
+    st.write("""It quantifies the variability of the tracking error, it is
+commonly used to asses the degree to which the returns of the portfolio deviate
+from those of the benchmark.  
+A high TEV can indicate higher risk or management decisions that lead to large
+deviations from the benchmark. A low TEV, on the other hand, can indicate a more
+consistent performance, in line with the benchmark.  
+The TEV is a measure of risk, the lower the better.""")
+    
+# IR
+st.write("""- **IR**: Information Ratio. This is computed as the mean of the
+tracking error divided by the TEV.""")
+with st.expander("More info on the IR", expanded=False):
+    st.write("""It is a measure of the risk-adjusted excess return of the
+portfolio relative to the benchmark. In other words, it tells us how much extra
+return we are getting for each unit of risk we are taking.  
+Usually a high IR is considered good, since it means that the benchmark is being
+outperformed even with risk taken into account. In other words, the IR provides
+insight into our fund's ability to tread the fine line between risk and return.  
+Conversely, a low IR mean that the benchmark has left us in the dust and we are
+taking on too much risk for the returns we are getting.  
+The IR is a measure of risk-adjusted return, the higher the better.""")
+    
+# MAT
+st.write("""- **MAT**: Mean Annual Turnover. This is the average of the annual
+turnover of the portfolio.""")
+with st.expander("More info on the MAT", expanded=False):
+    st.write("""The Mean Annual Turnover is a measure of how much the portfolio
+    changes over time. In particular, it quantifies the rate at which assest and
+    securities are bought and sold within a portfolio.  
+    A portfolio with high turnover rate can incur in higher transaction cost and
+    tax fees, which can eat into the returns of the portfolio, while a low
+    turnover rate leads to lower trading costs but makes our portfolio less
+    flexible and dynamic.""")
+
+# MATC
+st.write("""- **MATC**: Mean Annual Trading Costs. This is the average of the
+annual trading costs of the portfolio.""")
+with st.expander("More info on the MATC", expanded=False):
+    st.write("""It quantifies the average expenses incurred by the fund (such as
+    fees, commissions, bid-ask spread etc.) in order to execute its trades.  
+    A high MATC means that the fund is incurring in high trading costs, which
+    can eat into the returns of the portfolio, while a low MATC means that the
+    fund is incurring in low trading costs.""")
 
 with st.spinner("Loading the metrics..."):
     table_metrics = st.empty()
