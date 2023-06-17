@@ -10,8 +10,18 @@ import pickle
 st.set_page_config(
     page_title="PortFolio replication",
     page_icon=":chart_with_upwards_trend:",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
+# hide the menu and footer
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 BASEDIR = 'FinalProject/App/'
 
 #> Header <#
@@ -90,6 +100,7 @@ index's performance."""
 #> Futures Selection <#
 st.write("---")
 st.write("## :mag_right: Futures Selections")
+
 st.write(
 """For your convenience, we have pre-selected three groups of futures for you to
 tinker with.
@@ -135,10 +146,13 @@ daring_futures = futures_norm[daring_futures]
 
 # select the approach
 with st.sidebar:
-    approach = st.radio(
-        "Select the approach you want to use to replicate your portfolio",
-        ("Base", "Sure-Fire", "Dark Horse")
+    # create a small menu to select the approach
+    # leaving the options displayed in the sidebar
+    approach = st.selectbox(
+        "Select the approach",
+        ["Base", "Sure-Fire", "Dark Horse"]
     )
+
 
 # show the graph based on the approach
 with st.spinner("Loading the graph..."):
@@ -213,6 +227,21 @@ else:
 
 st.write("---")
 st.write("## :rocket: Portfolio replication")
+st.write("""We used the Elastic Net model to dynamically replicate the 
+performance of the Monster Index.\n
+Elastic Net is a linear regression model that combines the L1 and L2
+regularization techniques. Furthermore, we used a rolling window of 150 weeks to
+train the model. This mean that the model uses data from the past 150 weeks to
+predict next week's performance. This allows the model to adapt to changing
+market conditions and to capture the dynamics of the Monster Index. \n
+We chose Elastic Net because it is a rather simple model that is easy and cheap
+to train, while at the same time offering a very good performance. Furthermore,
+it is a linear model, which means that it is easy to interpret and to explain.\n
+So we thought it could offer the best bang for your buck to get you started
+with portfolio replication lightning fast. \n
+Here's how it stacks up against the Monster Index:
+"""
+)
 
 # leave empty space for the graph
 with st.spinner("Loading the graph..."):
