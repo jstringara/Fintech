@@ -28,9 +28,7 @@ BASEDIR = 'FinalProject/App/'
 st.title(" :chart_with_upwards_trend: PortFolio replication")
 st.write(
 """This is a tool to explore your portfolio replication options using
-Futures available on the market. \n
-If you want more information about the tool, please visit our [GitHub](
-https://github.com/jstringara/Fintech) page."""
+Futures available on the market. \n"""
 )
 
 #> Futures Presentation <#
